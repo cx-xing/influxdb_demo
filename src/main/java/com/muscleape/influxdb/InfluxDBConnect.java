@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
+import org.influxdb.dto.BatchPoints;
 import org.influxdb.dto.Point;
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
@@ -101,6 +102,24 @@ public class InfluxDBConnect {
 
         log.info("influxDB insert data:[{}]", builder.build().toString());
         influxDB.write(database, "", builder.build());
+    }
+
+    /**
+     * 插入POJO
+     */
+    public void insertPOJO(Point point) {
+        log.info("influxDB insert data:[{}]", point.toString());
+        influxDB.write(database, retentionPolicy, point);
+    }
+
+    /**
+     * 批量插入
+     *
+     * @param batchPoints
+     */
+    public void insertBatch(BatchPoints batchPoints) {
+        log.info("influxDB insert data:[{}]", batchPoints.getPoints().toString());
+        influxDB.write(batchPoints);
     }
 
 }
